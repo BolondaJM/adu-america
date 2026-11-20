@@ -4,16 +4,39 @@ const nav = document.querySelector("#nav");
 const toggle = document.querySelector("#nav-toggle");
 const progress = document.querySelector("#progress");
 const menu = document.querySelector("#nav-menu");
+const halloween = document.querySelector("#halloween");
+
+const halloweenShift = () => {
+  if (!halloween || halloween.hidden) {
+    document.documentElement.style.removeProperty("--halloween-logo-shift");
+    return;
+  }
+  const room = window.innerWidth < 980 ? 92 : Math.min(156, Math.max(104, window.innerWidth * 0.11));
+  const shift = Math.max(0, room * (1 - window.scrollY / 88));
+  document.documentElement.style.setProperty("--halloween-logo-shift", `${shift}px`);
+};
 
 const onScroll = () => {
   nav.classList.toggle("is-solid", window.scrollY > 12);
   const max = document.documentElement.scrollHeight - window.innerHeight;
   const ratio = max > 0 ? window.scrollY / max : 0;
   progress.style.transform = `scaleX(${ratio})`;
+  halloweenShift();
 };
 
 document.addEventListener("scroll", onScroll, { passive: true });
+window.addEventListener("resize", halloweenShift);
 onScroll();
+
+const renderHalloween = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 9, 1);
+  const end = new Date(now.getFullYear(), 10, 1);
+  halloween.hidden = now < start || now >= end;
+  halloweenShift();
+};
+
+renderHalloween();
 
 const setMenu = (open) => {
   nav.classList.toggle("is-open", open);
