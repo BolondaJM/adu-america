@@ -1,7 +1,7 @@
 // Shared HTML fragments. Used by the Vite include plugin (vite.config.js) and by
 // scripts/generate.mjs. Pages reference them with comment markers:
 //   <!--@head-->  <!--@header-->  <!--@header:minimal-->  <!--@footer-->  <!--@footer:minimal-->  <!--@leadform-->
-import { site, navData, projectTypes, cityOptions, markets } from "../site.config.mjs";
+import { site, getNav, projectTypes, cityOptions, markets } from "../site.config.mjs";
 
 export const esc = (s) =>
   String(s ?? "")
@@ -24,7 +24,7 @@ export function head() {
   };
   return `<link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <script>window.__SITE__=${JSON.stringify(cfg)};</script>`;
+    <script>window.__SITE__=${JSON.stringify(cfg).split("<").join("\\u003c")};</script>`;
 }
 
 const chevron = `<svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>`;
@@ -41,7 +41,7 @@ export function header(variant) {
       </div>
     </header>`;
   }
-  const items = navData
+  const items = getNav()
     .map((item) => {
       const subs = (item.children || [])
         .map(([label, href]) => `<a href="${href}">${esc(label)}</a>`)
@@ -231,13 +231,21 @@ export function leadForm({ extended = false, id = "lead-form" } = {}) {
 
 // ---- Include plugin helper -------------------------------------------------
 
+// Each include is wrapped in marker comments so the edge Worker can swap a fresh copy into
+// the pre-built home page (see worker/site.js).
+const inc = (name, html) => `<!--inc:${name}-->${html}<!--/inc:${name}-->`;
+
 export function applyIncludes(html) {
-  return html
-    .replace("<!--@head-->", head())
-    .replace("<!--@header:minimal-->", header("minimal"))
-    .replace("<!--@header-->", header())
-    .replace("<!--@footer:minimal-->", footer("minimal"))
-    .replace("<!--@footer-->", footer())
-    .replace("<!--@leadform:extended-->", leadForm({ extended: true }))
-    .replace("<!--@leadform-->", leadForm());
+  const swap = (marker, name, build) => (h) => h.includes(marker) ? h.replace(marker, () => inc(name, build())) : h;
+  return [
+    swap("<!--@head-->", "head", head),
+    swap("<!--@header:minimal-->", "header", () => header("minimal")),
+    swap("<!--@header-->", "header", () => header()),
+    swap("<!--@footer:minimal-->", "footer", () => footer("minimal")),
+    swap("<!--@footer-->", "footer", () => footer()),
+    swap("<!--@leadform:extended-->", "leadform", () => leadForm({ extended: true })),
+    swap("<!--@leadform-->", "leadform", () => leadForm()),
+  ].reduce((h, fn) => fn(h), html);
 }
+
+export { head as headHtml, header as headerHtml, footer as footerHtml, leadForm as leadFormHtml };

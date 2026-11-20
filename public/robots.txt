@@ -3,5 +3,6 @@ Allow: /
 Disallow: /lp/
 Disallow: /thank-you/
 Disallow: /api/
+Disallow: /admin/
 
 Sitemap: https://adu-america.com/sitemap.xml

@@ -7,9 +7,12 @@
     "gen": "node scripts/generate.mjs",
     "dev": "node scripts/generate.mjs && vite",
     "build": "node scripts/generate.mjs && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "cf:dev": "npm run build && wrangler dev"
   },
   "devDependencies": {
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "wrangler": "^4.166.0"
   }
 }

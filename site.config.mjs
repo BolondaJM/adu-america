@@ -202,7 +202,13 @@ const A = {
   "story-child": "Night view into a compact studio with a made bed, a desk lamp, and a small plant.",
 };
 
-export const img = (key) => ({ src: `/images/${key === "hero" ? "hero-backyard" : key}.jpg`, alt: A[key] });
+// `key` is a built-in image key, or any site path / URL (e.g. "/images/my-photo.jpg").
+export const img = (key, alt) => {
+  key = String(key || "hero");
+  if (A[key]) return { src: `/images/${key === "hero" ? "hero-backyard" : key}.jpg`, alt: alt || A[key] };
+  return { src: /^(\/|https?:)/.test(key) ? key : `/images/${key}`, alt: alt || "" };
+};
+export const imageKeys = Object.keys(A);
 
 // Existing photography is labeled on the site as design studies.
 export const projects = [
@@ -216,26 +222,17 @@ export const projects = [
   { slug: "kitchen-interior", title: "Kitchen and living interior", type: "Interior", image: "interior-living", note: "Shaker cabinets, butcher block and subway tile." },
 ];
 
-export const navData = [
+// Built from the live lists, so edits in the admin flow into the menu.
+export const getNav = () => [
   {
     label: "Models",
     href: "/models/",
-    children: [
-      ["Studio", "/models/studio/"],
-      ["1 Bedroom", "/models/1-bedroom/"],
-      ["2 Bedroom", "/models/2-bedroom/"],
-      ["Compare models", "/models/#compare"],
-    ],
+    children: [...models.map((m) => [m.name, `/models/${m.slug}/`]), ["Compare models", "/models/#compare"]],
   },
   {
     label: "Services",
     href: "/services/",
-    children: [
-      ["Tiny homes", "/services/tiny-homes/"],
-      ["ADUs", "/services/adus/"],
-      ["Pool houses", "/services/pool-houses/"],
-      ["Shell homes", "/services/shell-homes/"],
-    ],
+    children: services.map((s) => [s.name, `/services/${s.slug}/`]),
   },
   {
     label: "Locations",

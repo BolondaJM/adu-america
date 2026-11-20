@@ -6,6 +6,12 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
-  }
+    // The Worker handles every page request (so admin edits can override the built pages)
+    // but leaves fingerprinted assets and images to the static asset layer.
+    "run_worker_first": ["/*", "!/assets/*", "!/images/*"]
+  },
+  // Admin-edited content and its history. If Wrangler doesn't create this for you on deploy, run
+  //   npx wrangler kv namespace create CONTENT
+  // and add  "id": "<the returned id>"  to this entry.
+  "kv_namespaces": [{ "binding": "CONTENT" }]
 }

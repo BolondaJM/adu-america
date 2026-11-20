@@ -1,4 +1,5 @@
-// Cloudflare Worker: serves static assets and handles POST /api/lead.
+// Cloudflare Worker: serves static assets, handles POST /api/lead, serves admin-edited content
+// (worker/site.js) and the admin API (worker/admin.js).
 //
 // Configure (wrangler secret put <NAME>):
 //   RESEND_API_KEY     Email delivery via Resend (https://resend.com)
@@ -8,6 +9,9 @@
 //   TURNSTILE_SECRET   Optional: Cloudflare Turnstile secret key
 // At least one of RESEND_API_KEY or LEAD_WEBHOOK_URL is required, otherwise the API
 // answers 503 so the site never reports a lead as sent when it was not.
+
+import { handleAdmin } from "./admin.js";
+import { serveSite, guardStale } from "./site.js";
 
 const REQUIRED = {
   lead: ["name", "phone", "email", "city", "project"],
@@ -41,7 +45,33 @@ export default {
         return json({ ok: false, error: "server_error" }, 500);
       }
     }
-    return env.ASSETS ? env.ASSETS.fetch(request) : new Response("Not found", { status: 404 });
+    if (url.pathname.startsWith("/api/admin/")) {
+      try {
+        return await handleAdmin(request, env);
+      } catch (err) {
+        console.error("admin error", err);
+        return json({ ok: false, error: "server_error" }, 500);
+      }
+    }
+    if (!env.ASSETS) return new Response("Not found", { status: 404 });
+
+    // Admin-edited content (KV) wins; otherwise the pre-built static pages are served.
+    let state = { res: null, active: false };
+    try {
+      state = await serveSite(request, env);
+    } catch (err) {
+      console.error("dynamic render failed, serving static", err);
+    }
+    if (state.res) return state.res;
+    let assetRequest = request;
+    if (state.active && request.method === "GET") {
+      // Without conditional headers, a deleted page can't be answered 304 from a stale browser cache.
+      const headers = new Headers(request.headers);
+      for (const h of ["If-None-Match", "If-Modified-Since"]) headers.delete(h);
+      assetRequest = new Request(request.url, { method: "GET", headers });
+    }
+    const res = await env.ASSETS.fetch(assetRequest);
+    return guardStale(res, request, env, state).catch(() => res);
   },
 };
 
