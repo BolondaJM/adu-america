@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /lp/
+Disallow: /thank-you/
+Disallow: /api/
+
+Sitemap: https://adu-america.com/sitemap.xml

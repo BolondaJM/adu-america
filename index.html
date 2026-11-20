@@ -10,6 +10,7 @@
     />
     <meta name="theme-color" content="#132339" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!--@head-->
     <link rel="canonical" href="https://adu-america.com/" />
     <meta property="og:title" content="ADU America | The perfect ADU, handled from start to finish" />
     <meta
@@ -18,7 +19,10 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://adu-america.com/" />
-    <meta property="og:image" content="/images/hero-backyard.jpg" />
+    <meta property="og:image" content="https://adu-america.com/images/hero-backyard.jpg" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta name="twitter:image" content="https://adu-america.com/images/hero-backyard.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -87,37 +91,7 @@
       </svg>
     </div>
 
-    <header class="nav" id="nav">
-      <a class="logo" href="#top" aria-label="ADU America, home">
-        <svg viewBox="0 0 140 128" aria-hidden="true">
-          <path fill="#b87332" d="M8 124h9V42L69 11 60 6 8 37Z" />
-          <path
-            fill="currentColor"
-            fill-rule="evenodd"
-            d="M28 124V49L81 17l54 31v6h-13v70H75V89H37v35ZM37 53l35-19 3 45H37Z"
-          />
-        </svg>
-        <span>ADU America</span>
-      </a>
-      <button
-        class="nav__toggle"
-        id="nav-toggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="nav-menu"
-      >
-        <span class="sr-only">Menu</span>
-        <i></i><i></i>
-      </button>
-      <nav class="nav__menu" id="nav-menu" aria-label="Primary">
-        <a href="#models">Models</a>
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#faq">FAQ</a>
-        <a class="nav__phone" href="tel:+17205441352">(720) 544-1352</a>
-        <a class="btn btn--light" href="#consult">Free analysis</a>
-      </nav>
-    </header>
+    <!--@header-->
 
     <main id="main">
       <section class="hero" id="top">
@@ -210,6 +184,7 @@
               selections catalog for the finishes people actually choose.
             </p>
           </header>
+          <p><a class="text-link" href="/models/">Compare all models</a></p>
           <div class="model-grid">
             <article class="model">
               <img
@@ -373,6 +348,7 @@
             </article>
           </div>
         </div>
+        <div class="wrap"><p><a class="text-link" href="/services/">All services</a> · <a class="text-link" href="/pricing/">Pricing</a> · <a class="text-link" href="/projects/">Project gallery</a> · <a class="text-link" href="/locations/">Service areas</a></p></div>
         <figure class="diff__photo">
           <img
             src="/images/craft-detail.jpg"
@@ -394,6 +370,7 @@
               team handles the estimate, the permit package, and the selections.
             </p>
             <a class="btn btn--light" href="#consult">Free property analysis</a>
+            <p><a class="text-link text-link--light" href="/process/">See the full process</a></p>
           </div>
           <ol class="steps">
             <li>
@@ -628,6 +605,7 @@
               Our financing team helps you pick a path and get it in place. These are the routes
               we work with.
             </p>
+            <p><a class="text-link" href="/financing/">Financing options and payment calculator</a></p>
           </header>
           <ul class="finance__list">
             <li>
@@ -671,6 +649,7 @@
             </ol>
           </div>
           <div class="faq">
+            <p><a class="text-link" href="/faq/">See all questions</a> · <a class="text-link" href="/tools/feasibility-check/">Check if your lot qualifies</a></p>
             <article>
               <h3>
                 <button type="button" aria-expanded="false" aria-controls="faq-1" id="faq-b1">
@@ -762,113 +741,14 @@
           </p>
         </div>
         <div class="consult__panel">
-          <form id="lead-form" novalidate>
-            <h3>Free property analysis</h3>
-            <p class="form-lead">Name, a way to reach you, the city, and what you are thinking of building.</p>
-            <p class="form-error" id="form-error" role="alert" hidden></p>
-            <div class="field-row">
-              <label class="field">
-                <span>Name</span>
-                <input id="name" name="name" type="text" autocomplete="name" required />
-                <small class="err"></small>
-              </label>
-              <label class="field">
-                <span>Phone</span>
-                <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
-                <small class="err"></small>
-              </label>
-            </div>
-            <div class="field-row">
-              <label class="field">
-                <span>Email</span>
-                <input id="email" name="email" type="email" autocomplete="email" required />
-                <small class="err"></small>
-              </label>
-              <label class="field">
-                <span>City</span>
-                <input id="city" name="city" type="text" autocomplete="address-level2" list="cities" required />
-                <datalist id="cities">
-                  <option value="Denver"></option>
-                  <option value="Colorado Springs"></option>
-                  <option value="Salt Lake City"></option>
-                  <option value="Chicago"></option>
-                  <option value="Naperville"></option>
-                </datalist>
-                <small class="err"></small>
-              </label>
-            </div>
-            <label class="field">
-              <span>What do you want to build?</span>
-              <span class="select">
-                <select id="project" name="project" required>
-                  <option value="">Select one</option>
-                  <option>Studio</option>
-                  <option>1 Bedroom</option>
-                  <option>2 Bedroom</option>
-                  <option>Tiny home</option>
-                  <option>ADU or granny flat</option>
-                  <option>Garage conversion</option>
-                  <option>Pool house</option>
-                  <option>Backyard office</option>
-                  <option>Shell build</option>
-                  <option>Not sure yet</option>
-                </select>
-              </span>
-              <small class="err"></small>
-            </label>
-            <label class="field">
-              <span>Anything we should know? Optional.</span>
-              <textarea id="notes" name="notes" rows="3"></textarea>
-              <small class="err"></small>
-            </label>
-            <label class="hp" aria-hidden="true">
-              Company website
-              <input type="text" name="_honey" tabindex="-1" autocomplete="off" />
-            </label>
-            <button class="btn btn--dark" type="submit">Request my property analysis</button>
-            <p class="fine">We use this to schedule the analysis. No newsletter.</p>
-          </form>
-          <div class="success" id="lead-success" hidden>
-            <p class="eyebrow">You’re in</p>
-            <h3 id="lead-success-text">Request received.</h3>
-            <a class="btn btn--dark" href="tel:+17205441352">Call (720) 544-1352</a>
-          </div>
+          <!--@leadform-->
         </div>
       </section>
     </main>
 
-    <footer class="footer">
-      <div class="wrap footer__grid">
-        <div>
-          <p class="logo logo--footer">
-            <svg viewBox="0 0 140 128" aria-hidden="true">
-              <path fill="#b87332" d="M8 124h9V42L69 11 60 6 8 37Z" />
-              <path
-                fill="currentColor"
-                fill-rule="evenodd"
-                d="M28 124V49L81 17l54 31v6h-13v70H75V89H37v35ZM37 53l35-19 3 45H37Z"
-              />
-            </svg>
-            ADU America
-          </p>
-          <p>Stick-built tiny homes, ADUs, and pool houses.</p>
-        </div>
-        <address>
-          <a href="tel:+17205441352">(720) 544-1352</a>
-          <a href="mailto:admin@adu-america.com">admin@adu-america.com</a>
-        </address>
-        <p>Denver Metro, Colorado Springs, Salt Lake Metro, Chicagoland, and affiliate cities.</p>
-      </div>
-      <div class="wrap footer__base">
-        <small>© 2026 ADU America</small>
-        <small>Images on this page are design studies of the homes we build, not photos of a specific client project.</small>
-      </div>
-    </footer>
+    <!--@footer-->
 
-    <div class="dock">
-      <a href="tel:+17205441352">Call</a>
-      <a href="#consult">Free analysis</a>
-    </div>
+    
 
     <script type="module" src="/main.js"></script>
   </body>
